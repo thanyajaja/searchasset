@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Search Asset</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/themes/default/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css"/>
+        <link href="css/app.css" rel="stylesheet" type="text/css"/>
+        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <script src="js/jquery.min.js" type="text/javascript"></script>
+        <script src="js/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
+        <script src="js/bootstrap.min.js" type="text/javascript"></script>
+
+    </head>
+    <body>
+        <section data-role="page" id="home">
+            <header data-role="header">
+                <img class="img-responsive" src="images/logo.png" alt=""/>
+                <a href="#main-menu" data-role="button" data-inline="true" data-icon="grid" data-iconpos="notext" data-theme="b"></a>
+            </header>
+            <div data-role="content">
+                <a href="#main-menu" data-mini="true" data-role="button" data-icon="grid" data-theme="b">Menu</a>
+                <a href="#app-detail" data-mini="true" data-role="button"  data-icon="bullets" data-theme="b">Application Detail</a>
+                <a href="#about-us" data-mini="true" data-role="button"  data-icon="user" data-theme="b">About Us</a>
+            </div>
+            <div data-role="footer">
+                <h1>&copy; Tichakron Jongcharuan</h1>
+            </div>
+        </section>
+        
+        <section data-role="page" id="main-menu">
+            <header data-role="header">
+                <h1>Menu</h1>
+                <a href="#home" data-role="button" data-inline="true" data-icon="home" data-iconpos="notext" data-theme="b"></a>
+            </header>
+            <div data-role="content">
+                <a href="search.html" data-mini="true" data-role="button" data-icon="search" data-theme="b">ค้นหาอุปกรณ์</a>
+                <a href="#octype-list" data-mini="true" data-role="button"  data-icon="bullets" data-theme="b">แสดงรายการอุปกรณ์ทั้งหมด</a>
+            </div>
+            <div data-role="footer">
+                <h1>&copy; Tichakron Jongcharuan</h1>
+            </div>
+        </section>
+        
+        <section data-role="page" id="app-detail">
+            <header data-role="header">
+                <h1>Application Detail</h1>
+                <a href="" data-role="button" data-inline="true" data-rel="back" data-icon="back" data-iconpos="notext" data-theme="b"></a>
+            </header>
+            <div data-role="content">
+                <p class="setcenter">ใช้สำหรับตรวจสอบอุปกรณ์คอมพิวเตอร์</p>
+                <p class="setcenter">ภายในฝ่ายก่อสร้างระบบส่ง</p>
+            </div>
+            <div data-role="footer">
+                <h1>&copy; Tichakron Jongcharuan</h1>
+            </div>
+        </section>
+        
+        <section data-role="page" id="about-us">
+            <header data-role="header">
+                <h1>About Us</h1>
+                <a href="" data-role="button" data-inline="true" data-rel="back" data-icon="back" data-iconpos="notext" data-theme="b"></a>
+            </header>
+            <div data-role="content">
+                <p class="setcenter">พัฒนาโดย : นายธิชากร จงเจริญ</p>
+                <p class="setcenter">แผนกระบบเครือข่ายสารสนเทศ กองสนับสนุนงานก่อสร้าง โทร. 63313</p>
+                <p class="setcenter">Email : tichakron.j@egat.co.th</p>
+            </div>
+            <div data-role="footer">
+                <h1>&copy; Tichakron Jongcharuan</h1>
+            </div>
+        </section>
+        
+        <section data-role="page" id="octype-list">
+            <header data-role="header">
+                <h1>รายการอุปกรณ์ทั้งหมด</h1>
+                <a href="" data-role="button" data-inline="true" data-rel="back" data-icon="back" data-iconpos="notext" data-theme="b"></a>
+                <a href="#main-menu" data-role="button" data-inline="true" data-icon="grid" data-iconpos="notext" data-theme="b"></a>
+            </header>
+            <div data-role="content">
+                <ul data-role="listview" data-inset="true" id="oclist-detail">
+                    <li data-icon="carat-r">
+                        <a>A</a>
+                    </li>
+                    <li data-icon="carat-r">
+                        <a>B</a>
+                    </li> 
+                </ul>
+            </div>
+            <div data-role="footer">
+                <h1>&copy; Tichakron Jongcharuan</h1>
+            </div>
+        </section>
+        
+        <script type="text/javascript">
+            //var serviceURL = "http://tscd.egat.co.th/testwebapp/query_list2.asp";
+            var serviceURL = "http://10.20.93.64/searchasset_services/search_list.php";
+            var octype;
+            $("#octype-list").on('pageinit',function(){
+                //alert("hello");
+              //  $.getJSON(serviceURL,function (data){
+              //      $("#oclist-detail li").remove();
+             //   });
+            });
+         
+             $(document).on('pageshow',"#octype-list",function(){
+                $.getJSON(serviceURL,function (data){
+                    $("#oclist-detail li").remove();
+                    octype=data.items;
+                    //alert(octype);
+                    $.each(octype,function (index,oct){
+                        $("#oclist-detail").append("<li><a href='list_detail.html#octype-detail?id="+oct.id+"' rel='external'>Serial Number : "+oct.sn+"</a><li>");
+                        //alert(oct.SN);
+                    });
+                    $("#oclist-detail").listview('refresh');
+                });
+            });
+            
+            function getUrlVars() {
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for (var i = 0; i < hashes.length; i++)
+                {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                return vars;
+            }
+        </script>  
+    </body>
+</html>
